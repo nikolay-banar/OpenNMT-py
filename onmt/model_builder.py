@@ -49,7 +49,8 @@ def build_embeddings(opt, text_field, for_encoder=True):
 
     emb = Embeddings(
         word_vec_size=emb_dim,
-        position_encoding=opt.position_encoding,
+        position_encoding=opt.position_encoding if not for_encoder or
+                                                   (for_encoder and not opt.conv_position_encoding) else False,
         feat_merge=opt.feat_merge,
         feat_vec_exponent=opt.feat_vec_exponent,
         feat_vec_size=opt.feat_vec_size,

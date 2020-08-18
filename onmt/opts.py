@@ -42,6 +42,9 @@ def model_opts(parser):
               help="Use a sin to mark relative words positions. "
                    "Necessary for non-RNN style models.")
 
+    group.add('--conv_position_encoding', '-conv_position_encoding', action='store_true',
+              help="Positional encoding after convolutions in conv_transformer")
+
     group = parser.add_argument_group('Model-Embedding Features')
     group.add('--feat_merge', '-feat_merge', type=str, default='concat',
               choices=['concat', 'sum', 'mlp'],
@@ -69,15 +72,24 @@ def model_opts(parser):
               help='Data type of the model.')
 
     group.add('--encoder_type', '-encoder_type', type=str, default='rnn',
-              choices=['rnn', 'brnn', 'mean', 'transformer', 'cnn'],
+              choices=['rnn', 'brnn', 'mean', 'transformer', 'cnn', 'conv_transformer'],
               help="Type of encoder layer to use. Non-RNN layers "
                    "are experimental. Options are "
-                   "[rnn|brnn|mean|transformer|cnn].")
+                   "[rnn|brnn|mean|transformer|cnn|conv_transformer].")
     group.add('--decoder_type', '-decoder_type', type=str, default='rnn',
-              choices=['rnn', 'transformer', 'cnn'],
+              choices=['rnn', 'transformer', 'cnn', 'conv_transformer'],
               help="Type of decoder layer to use. Non-RNN layers "
                    "are experimental. Options are "
-                   "[rnn|transformer|cnn].")
+                   "[rnn|transformer|cnn|conv_transformer].")
+
+    group.add('--hw_layers', '-hw_layers', type=int, default=4,
+              help='Number of layers in highway for conv_transformer.')
+
+    group.add('--n_conv', '-n_conv', type=int, default=1,
+              help='Proportion of conv. filters n_conv*(200, 200, 250, 250, 300, 300, 300, 300) for conv_transformer')
+
+    group.add('--conv_pooling', '-conv_pooling', type=int, default=5,
+              help='Pooling window size for conv_transformer.')
 
     group.add('--layers', '-layers', type=int, default=-1,
               help='Number of layers in enc/dec.')
